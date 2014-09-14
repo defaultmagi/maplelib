@@ -1,16 +1,16 @@
 /*
-        Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
-        This file is part of maplelib-go.
-        maplelib-go is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-        maplelib-go is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-        GNU General Public License for more details.
-        You should have received a copy of the GNU General Public License
-        along with maplelib-go. If not, see <http://www.gnu.org/licenses/>.
+   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   This file is part of maplelib-go.
+   maplelib-go is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   maplelib-go is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+   GNU General Public License for more details.
+   You should have received a copy of the GNU General Public License
+   along with maplelib-go. If not, see <http://www.gnu.org/licenses/>.
 */
 
 // Various go utilities related to MapleStory (encryption, packets, and so on)
@@ -101,14 +101,14 @@ func (p *Packet) Encode8(qw uint64) {
 // Encodes and appends a buffer to the packet using 2 bytes for the length
 // followed by the data
 func (p *Packet) EncodeBuffer(b []byte) {
-        p.Encode2(uint16(len(b)))
-        p.Append(b)
+	p.Encode2(uint16(len(b)))
+	p.Append(b)
 }
 
 // Encodes and appends a string to the packet using 2 bytes for the length
 // followed by the text bytes
 func (p *Packet) EncodeString(str string) {
-        p.EncodeBuffer([]byte(str))                
+	p.EncodeBuffer([]byte(str))
 }
 
 // Checks wether the given iterator has enough room
@@ -184,28 +184,28 @@ func (p Packet) Decode8(it *PacketIterator) (res uint64, err error) {
 	return
 }
 
-// Decodes a buffer and returns a slice of the packet that points to the buffer 
+// Decodes a buffer and returns a slice of the packet that points to the buffer
 // NOTE: the returned slice is NOT a copy and any operation on it will affect the packet
 func (p Packet) DecodeBuffer(it *PacketIterator) (res []byte, err error) {
-        buflen, err := p.Decode2(it)
-        if err != nil {
-                return        
-        }
-        
-        slice := *it
-        if !hasRoom(slice, int(buflen)) {
-            err = EndOfPacketError{int(buflen), len(slice)}
-            return
-        }
-        
-        res = slice[:buflen]
-        *it = slice[buflen:]
-        return
+	buflen, err := p.Decode2(it)
+	if err != nil {
+		return
+	}
+
+	slice := *it
+	if !hasRoom(slice, int(buflen)) {
+		err = EndOfPacketError{int(buflen), len(slice)}
+		return
+	}
+
+	res = slice[:buflen]
+	*it = slice[buflen:]
+	return
 }
 
 // Decodes a string and returns it as a copy of the data
 func (p Packet) DecodeString(it *PacketIterator) (res string, err error) {
-        bytes, err := p.DecodeBuffer(it)
-        res = string(bytes[:])
-        return
+	bytes, err := p.DecodeBuffer(it)
+	res = string(bytes[:])
+	return
 }
