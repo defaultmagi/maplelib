@@ -16,9 +16,7 @@
 // Various go utilities related to MapleStory (encryption, packets, and so on)
 package maplelib
 
-import (
-	"fmt"
-)
+import "fmt"
 
 // An array of bytes that contains a decrypted MapleStory packet.
 // All of the numeric values are encoded in little endian.
