@@ -13,7 +13,12 @@ Then simply
 and you're ready to go.
 
 You can also manually clone the repository anywhere you want by running
+
     git clone https://github.com/Francesco149/maplelib.git
+    
+To verify that the library is correctly installed and working, run
+
+    go test github.com/Francesco149/maplelib
     
 Documentation
 ============
