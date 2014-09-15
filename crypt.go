@@ -43,7 +43,8 @@ type Crypt struct {
 const encryptedHeaderSize = 4
 const blocksize = 1460
 
-var aeskey = [32]byte{0x13, 0x00, 0x00, 0x00,
+var aeskey = [32]byte{
+        0x13, 0x00, 0x00, 0x00,
 	0x08, 0x00, 0x00, 0x00,
 	0x06, 0x00, 0x00, 0x00,
 	0xB4, 0x00, 0x00, 0x00,
@@ -85,7 +86,7 @@ func (c *Crypt) Encrypt(buffer []byte) {
 // Decrypts the given array of bytes.
 // NOTE: you must omit the first 4 bytes (encrypted header)
 func (c *Crypt) Decrypt(buffer []byte) {
-	c.aesDecrypt(buffer[:])
+	c.aesCrypt(buffer[:])
 	mapleDecrypt(buffer[:])
 }
 
@@ -313,35 +314,6 @@ func (c *Crypt) aesCrypt(buf []byte) {
 
 		stream := cipher.NewOFB(block, c.Key[:])
 		stream.XORKeyStream(buf[pos:pos+cbwrite], buf[pos:pos+cbwrite])
-
-		pos += tpos
-
-		if first == 1 {
-			first = 0
-		}
-	}
-}
-
-func (c *Crypt) aesDecrypt(buf []byte) {
-	var pos, tpos, cbread, cb int32 = 0, 0, 0, int32(len(buf))
-	var first byte = 1
-
-	for cb > pos {
-		tpos = blocksize - int32(first*4)
-
-		if cb > pos+tpos {
-			cbread = tpos
-		} else {
-			cbread = cb - pos
-		}
-
-		block, err := aes.NewCipher(aeskey[:])
-		if err != nil {
-			panic(err) // cbf to handle this unlikely error
-		}
-
-		stream := cipher.NewOFB(block, c.Key[:])
-		stream.XORKeyStream(buf[pos:pos+cbread], buf[pos:pos+cbread])
 
 		pos += tpos
 
