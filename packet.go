@@ -13,31 +13,30 @@
    along with maplelib-go. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Various go utilities related to MapleStory (encryption, packets, and so on)
+// Package maplelib contains various go utilities related to MapleStory (encryption, packets, and so on)
 package maplelib
 
 import "fmt"
 
-// An array of bytes that contains a decrypted MapleStory packet.
+// A Packet is an array of bytes that contains a decrypted MapleStory packet.
 // All of the numeric values are encoded in little endian.
 type Packet []byte
 
-// A slice of the packet array which is used as an iterator when reading values
+// A PacketIterator is a slice of the packet array which is used as an iterator when reading values
 type PacketIterator []byte
 
-// Returned when trying to read past the end of the packet
+// A EndOfPacketError is returned when trying to read past the end of the packet
 type EndOfPacketError struct {
 	Bytes     int // bytes we attempted to read
 	BytesLeft int // bytes left
 }
-
 func (e EndOfPacketError) Error() string {
 	return fmt.Sprintf(
 		"Tried to read %d bytes with %d bytes left to read.",
 		e.Bytes, e.BytesLeft)
 }
 
-// Initializes an empty packet
+// NewPacket initializes an empty packet
 // NOTE: do not create packets with make or new, as that will cause unexpected behaviour
 func NewPacket() Packet {
 	return make(Packet, 0)
@@ -47,34 +46,34 @@ func (p Packet) String() string {
 	return fmt.Sprintf("Packet(%d): % X", len(p), []byte(p))
 }
 
-// Returns a packet iterator that points to the beginning of the packet
+// Begin returns a packet iterator that points to the beginning of the packet
 func (p Packet) Begin() PacketIterator {
 	return PacketIterator(p[:])
 }
 
-// Returns a packet iterator that points at the desired position
+// At returns a packet iterator that points at the desired position
 func (p Packet) At(i int) PacketIterator {
 	return PacketIterator(p[i:])
 }
 
-// Appends raw data at the end of the packet
+// Append appends raw data at the end of the packet
 func (p *Packet) Append(data []byte) {
 	*p = append(*p, data...)
 }
 
-// Encodes and appends a byte to the packet
+// Encode1 encodes and appends a byte to the packet
 func (p *Packet) Encode1(b byte) {
 	*p = append(*p, b)
 }
 
-// Encodes and appends a word to the packet
+// Encode2 encodes and appends a word to the packet
 func (p *Packet) Encode2(w uint16) {
 	*p = append(*p,
 		byte(w),
 		byte(w>>8))
 }
 
-// Encodes and appends a dword to the packet
+// Encode4 encodes and appends a dword to the packet
 func (p *Packet) Encode4(dw uint32) {
 	*p = append(*p,
 		byte(dw),
@@ -83,7 +82,7 @@ func (p *Packet) Encode4(dw uint32) {
 		byte(dw>>24))
 }
 
-// Encodes and appends a qword to the packet
+// Encode8 encodes and appends a qword to the packet
 func (p *Packet) Encode8(qw uint64) {
 	*p = append(*p,
 		byte(qw),
@@ -96,26 +95,26 @@ func (p *Packet) Encode8(qw uint64) {
 		byte(qw>>56))
 }
 
-// Encodes and appends a buffer to the packet using 2 bytes for the length
+// EncodeBuffer encodes and appends a buffer to the packet using 2 bytes for the length
 // followed by the data
 func (p *Packet) EncodeBuffer(b []byte) {
 	p.Encode2(uint16(len(b)))
 	p.Append(b)
 }
 
-// Encodes and appends a string to the packet using 2 bytes for the length
+// EncodeString encodes and appends a string to the packet using 2 bytes for the length
 // followed by the text bytes
 func (p *Packet) EncodeString(str string) {
 	p.EncodeBuffer([]byte(str))
 }
 
-// Checks wether the given iterator has enough room
+// hasRoom checks whether the given iterator has enough room
 // ahead to read the given number of bytes
 func hasRoom(it PacketIterator, byteCount int) bool {
 	return len(it) >= byteCount
 }
 
-// Decodes a byte at the position specified
+// Decode1 decodes a byte at the position specified
 // by the given iterator which is then incremented
 func (p Packet) Decode1(it *PacketIterator) (res byte, err error) {
 	slice := *it
@@ -129,7 +128,7 @@ func (p Packet) Decode1(it *PacketIterator) (res byte, err error) {
 	return
 }
 
-// Decodes a word (2 bytes) at the position specified
+// Decode2 decodes a word (2 bytes) at the position specified
 // by the given iterator which is then incremented
 func (p Packet) Decode2(it *PacketIterator) (res uint16, err error) {
 	slice := *it
@@ -144,7 +143,7 @@ func (p Packet) Decode2(it *PacketIterator) (res uint16, err error) {
 	return
 }
 
-// Decodes a dword (4 bytes) at the position specified
+// Decode4 decodes a dword (4 bytes) at the position specified
 // by the given iterator which is then incremented
 func (p Packet) Decode4(it *PacketIterator) (res uint32, err error) {
 	slice := *it
@@ -161,7 +160,7 @@ func (p Packet) Decode4(it *PacketIterator) (res uint32, err error) {
 	return
 }
 
-// Decodes a qword (8 bytes) at the position specified
+// Decode8 decodes a qword (8 bytes) at the position specified
 // by the given iterator which is then incremented
 func (p Packet) Decode8(it *PacketIterator) (res uint64, err error) {
 	slice := *it
@@ -182,7 +181,7 @@ func (p Packet) Decode8(it *PacketIterator) (res uint64, err error) {
 	return
 }
 
-// Decodes a buffer and returns a slice of the packet that points to the buffer
+// DecodeBuffer decodes a buffer and returns a slice of the packet that points to the buffer
 // NOTE: the returned slice is NOT a copy and any operation on it will affect the packet
 func (p Packet) DecodeBuffer(it *PacketIterator) (res []byte, err error) {
 	buflen, err := p.Decode2(it)
@@ -201,7 +200,7 @@ func (p Packet) DecodeBuffer(it *PacketIterator) (res []byte, err error) {
 	return
 }
 
-// Decodes a string and returns it as a copy of the data
+// DecodeString decodes a string and returns it as a copy of the data
 func (p Packet) DecodeString(it *PacketIterator) (res string, err error) {
 	bytes, err := p.DecodeBuffer(it)
 	res = string(bytes[:])

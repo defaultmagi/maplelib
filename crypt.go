@@ -22,7 +22,7 @@ import (
 )
 
 /*
-   An encryption key for MapleStory packets.
+   A Crypt is an encryption key for MapleStory packets.
    It consists of a 4-byte value repeated four times for a total of 16 bytes.
 
    MapleStory uses two keys: one is used to encrypt sent packets and the other
@@ -37,7 +37,7 @@ import (
 */
 type Crypt struct {
 	mapleVersion uint16
-	Key          [16]byte
+	key          [16]byte
 }
 
 const encryptedHeaderSize = 4
@@ -53,13 +53,13 @@ var aeskey = [32]byte{
 	0x33, 0x00, 0x00, 0x00,
 	0x52, 0x00, 0x00, 0x00}
 
-// Initializes and returns encryption key
+// NewCrypt initializes and returns an encryption key
 func NewCrypt(key [4]byte, mapleVersion uint16) Crypt {
 	var res Crypt
 
 	// Repeats the key 4 times
 	for i := 0; i < 4; i++ {
-		copy(res.Key[4*i:], key[:])
+		copy(res.key[4*i:], key[:])
 	}
 
 	res.mapleVersion = encodeMapleVersion(mapleVersion)
@@ -67,15 +67,20 @@ func NewCrypt(key [4]byte, mapleVersion uint16) Crypt {
 }
 
 func (c Crypt) String() string {
-	return fmt.Sprintf("MapleCrypt[v%d]{% X}", c.GetMapleVersion(), c.Key)
+	return fmt.Sprintf("MapleCrypt[v%d]{% X}", c.MapleVersion(), c.key)
 }
 
-// Returns the target MapleStory version for this encryption key
-func (c *Crypt) GetMapleVersion() uint16 {
+// MapleVersion returns the target MapleStory version for this encryption key
+func (c *Crypt) MapleVersion() uint16 {
 	return decodeMapleVersion(c.mapleVersion)
 }
 
-// Encrypts the given array of bytes.
+// IV returns a slice of the current initialization vector of this key (16 bytes)
+func (c *Crypt) IV() []byte {
+        return c.key[:]
+}
+
+// Encrypt encrypts the given array of bytes.
 // NOTE: the array must have 4 bytes of space at the beginning for the encrypted header
 func (c *Crypt) Encrypt(buffer []byte) {
 	c.makeHeader(buffer)
@@ -83,7 +88,7 @@ func (c *Crypt) Encrypt(buffer []byte) {
 	c.aesCrypt(buffer[encryptedHeaderSize:])
 }
 
-// Decrypts the given array of bytes.
+// Decrypt decrypts the given array of bytes.
 // NOTE: you must omit the first 4 bytes (encrypted header)
 func (c *Crypt) Decrypt(buffer []byte) {
 	c.aesCrypt(buffer[:])
@@ -95,8 +100,8 @@ func (c *Crypt) makeHeader(buffer []byte) {
 
 	// I have no idea what I'm doing
 	// this encryption shit was reversed from the game itself
-	iiv := uint16(c.Key[3] & 0xFF) // is the & 0xFF even needed?
-	iiv |= uint16(c.Key[2]) << 8 & 0xFF00
+	iiv := uint16(c.key[3] & 0xFF) // is the & 0xFF even needed?
+	iiv |= uint16(c.key[2]) << 8 & 0xFF00
 
 	iiv ^= c.mapleVersion
 	mlength := uint16((cb << 8 & 0xFF00) | cb>>8)
@@ -108,7 +113,7 @@ func (c *Crypt) makeHeader(buffer []byte) {
 	buffer[3] = byte(xoredIv & 0xFF)
 }
 
-// Decodes the packet length from the encrypted header.
+// GetPacketLength decodes the packet length from the encrypted header.
 // NOTE: this size does not include the 4-byte encrypted header.
 func GetPacketLength(encryptedHeader []byte) int {
 	return int((uint16(encryptedHeader[0]) + uint16(encryptedHeader[1])*0x100) ^
@@ -128,7 +133,7 @@ func decodeMapleVersion(mapleVersion uint16) (res uint16) {
 	return
 }
 
-// Shuffles the current key after an encryption or decryption
+// Shuffle shuffles the current key after an encryption or decryption
 func (c *Crypt) Shuffle() {
 	// I have no idea what I'm doing
 	// this encryption shit was reversed from the game itself
@@ -156,7 +161,7 @@ func (c *Crypt) Shuffle() {
 	var fulliv, shift uint32
 
 	for i := byte(0); i < 4; i++ {
-		input = c.Key[i]
+		input = c.key[i]
 		valueinput = im12andwhatisthis[input]
 
 		newiv[0] += im12andwhatisthis[newiv[1]] - input
@@ -174,7 +179,7 @@ func (c *Crypt) Shuffle() {
 	}
 
 	for i := byte(0); i < 4; i++ {
-		copy(c.Key[4*i:], newiv[:])
+		copy(c.key[4*i:], newiv[:])
 	}
 }
 
@@ -312,7 +317,7 @@ func (c *Crypt) aesCrypt(buf []byte) {
 			panic(err) // cbf to handle this unlikely error
 		}
 
-		stream := cipher.NewOFB(block, c.Key[:])
+		stream := cipher.NewOFB(block, c.key[:])
 		stream.XORKeyStream(buf[pos:pos+cbwrite], buf[pos:pos+cbwrite])
 
 		pos += tpos
