@@ -27,13 +27,13 @@ type PacketIterator []byte
 
 // A EndOfPacketError is returned when trying to read past the end of the packet
 type EndOfPacketError struct {
-	Bytes     int // bytes we attempted to read
-	BytesLeft int // bytes left
+	bytes     int // bytes we attempted to read
+	bytesLeft int // bytes left
 }
 func (e EndOfPacketError) Error() string {
 	return fmt.Sprintf(
 		"Tried to read %d bytes with %d bytes left to read.",
-		e.Bytes, e.BytesLeft)
+		e.bytes, e.bytesLeft)
 }
 
 // NewPacket initializes an empty packet
