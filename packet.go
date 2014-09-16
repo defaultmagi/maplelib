@@ -30,6 +30,7 @@ type EndOfPacketError struct {
 	bytes     int // bytes we attempted to read
 	bytesLeft int // bytes left
 }
+
 func (e EndOfPacketError) Error() string {
 	return fmt.Sprintf(
 		"Tried to read %d bytes with %d bytes left to read.",
@@ -114,9 +115,8 @@ func hasRoom(it PacketIterator, byteCount int) bool {
 	return len(it) >= byteCount
 }
 
-// Decode1 decodes a byte at the position specified
-// by the given iterator which is then incremented
-func (p Packet) Decode1(it *PacketIterator) (res byte, err error) {
+// Decode1 decodes a byte at the current position of the iterator which is then incremented
+func (it *PacketIterator) Decode1() (res byte, err error) {
 	slice := *it
 	if !hasRoom(slice, 1) {
 		err = EndOfPacketError{1, len(slice)}
@@ -128,9 +128,8 @@ func (p Packet) Decode1(it *PacketIterator) (res byte, err error) {
 	return
 }
 
-// Decode2 decodes a word (2 bytes) at the position specified
-// by the given iterator which is then incremented
-func (p Packet) Decode2(it *PacketIterator) (res uint16, err error) {
+// Decode2 decodes a word (2 bytes) at the current position of the iterator which is then incremented
+func (it *PacketIterator) Decode2() (res uint16, err error) {
 	slice := *it
 	if !hasRoom(slice, 2) {
 		err = EndOfPacketError{2, len(slice)}
@@ -143,9 +142,8 @@ func (p Packet) Decode2(it *PacketIterator) (res uint16, err error) {
 	return
 }
 
-// Decode4 decodes a dword (4 bytes) at the position specified
-// by the given iterator which is then incremented
-func (p Packet) Decode4(it *PacketIterator) (res uint32, err error) {
+// Decode4 decodes a dword (4 bytes) at the current position of the iterator which is then incremented
+func (it *PacketIterator) Decode4() (res uint32, err error) {
 	slice := *it
 	if !hasRoom(slice, 4) {
 		err = EndOfPacketError{4, len(slice)}
@@ -160,9 +158,8 @@ func (p Packet) Decode4(it *PacketIterator) (res uint32, err error) {
 	return
 }
 
-// Decode8 decodes a qword (8 bytes) at the position specified
-// by the given iterator which is then incremented
-func (p Packet) Decode8(it *PacketIterator) (res uint64, err error) {
+// Decode8 decodes a qword (8 bytes) at the current position of the iterator which is then incremented
+func (it *PacketIterator) Decode8() (res uint64, err error) {
 	slice := *it
 	if !hasRoom(slice, 8) {
 		err = EndOfPacketError{8, len(slice)}
@@ -183,8 +180,8 @@ func (p Packet) Decode8(it *PacketIterator) (res uint64, err error) {
 
 // DecodeBuffer decodes a buffer and returns a slice of the packet that points to the buffer
 // NOTE: the returned slice is NOT a copy and any operation on it will affect the packet
-func (p Packet) DecodeBuffer(it *PacketIterator) (res []byte, err error) {
-	buflen, err := p.Decode2(it)
+func (it *PacketIterator) DecodeBuffer() (res []byte, err error) {
+	buflen, err := it.Decode2()
 	if err != nil {
 		return
 	}
@@ -201,8 +198,8 @@ func (p Packet) DecodeBuffer(it *PacketIterator) (res []byte, err error) {
 }
 
 // DecodeString decodes a string and returns it as a copy of the data
-func (p Packet) DecodeString(it *PacketIterator) (res string, err error) {
-	bytes, err := p.DecodeBuffer(it)
+func (it *PacketIterator) DecodeString() (res string, err error) {
+	bytes, err := it.DecodeBuffer()
 	res = string(bytes[:])
 	return
 }

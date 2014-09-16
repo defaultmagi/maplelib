@@ -142,11 +142,11 @@ func TestMultipleEncode(t *testing.T) {
 }
 
 func TestDecode1(t *testing.T) {
-	const fun = "packet.Decode1(&it)"
+	const fun = "it.Decode1()"
 	var packet, out = Packet{0xAA}, byte(0xAA)
 
 	it := packet.Begin()
-	res, err := packet.Decode1(&it)
+	res, err := it.Decode1()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -162,11 +162,11 @@ func TestDecode1(t *testing.T) {
 }
 
 func TestDecode2(t *testing.T) {
-	const fun = "packet.Decode2(&it)"
+	const fun = "it.Decode2()"
 	var packet, out = Packet{0xBB, 0xAA}, uint16(0xAABB)
 
 	it := packet.Begin()
-	res, err := packet.Decode2(&it)
+	res, err := it.Decode2()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -182,11 +182,11 @@ func TestDecode2(t *testing.T) {
 }
 
 func TestDecode4(t *testing.T) {
-	const fun = "packet.Decode4(&it)"
+	const fun = "it.Decode4()"
 	var packet, out = Packet{0xDD, 0xCC, 0xBB, 0xAA}, uint32(0xAABBCCDD)
 
 	it := packet.Begin()
-	res, err := packet.Decode4(&it)
+	res, err := it.Decode4()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -202,12 +202,12 @@ func TestDecode4(t *testing.T) {
 }
 
 func TestDecode8(t *testing.T) {
-	const fun = "packet.Decode8(&it)"
+	const fun = "it.Decode8()"
 	var packet, out = Packet{0x11, 0x00, 0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA},
 		uint64(0xAABBCCDDEEFF0011)
 
 	it := packet.Begin()
-	res, err := packet.Decode8(&it)
+	res, err := it.Decode8()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -223,12 +223,12 @@ func TestDecode8(t *testing.T) {
 }
 
 func TestDecodeBuffer(t *testing.T) {
-	const fun = "packet.DecodeBuffer(&it)"
+	const fun = "it.DecodeBuffer()"
 	var packet, out = Packet{0x08, 0x00, 0x11, 0x00, 0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA},
 		[]byte{0x11, 0x00, 0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA}
 
 	it := packet.Begin()
-	res, err := packet.DecodeBuffer(&it)
+	res, err := it.DecodeBuffer()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -244,12 +244,12 @@ func TestDecodeBuffer(t *testing.T) {
 }
 
 func TestDecodeString(t *testing.T) {
-	const fun = "packet.DecodeString(&it)"
+	const fun = "it.DecodeString()"
 	var packet, out = Packet{0x07, 0x00, 'l', 'o', 'l', 'i', 'c', 'o', 'n'},
 		"lolicon"
 
 	it := packet.Begin()
-	res, err := packet.DecodeString(&it)
+	res, err := it.DecodeString()
 
 	if err != nil {
 		t.Errorf("%s: %v", fun, err)
@@ -276,39 +276,39 @@ func TestMultipleDecode(t *testing.T) {
 		"loli"
 
 	it := packet.Begin()
-	res1, err := packet.Decode1(&it)
-	res2, err := packet.Decode2(&it)
-	res4, err := packet.Decode4(&it)
-	res8, err := packet.Decode8(&it)
-	resbuf, err := packet.DecodeBuffer(&it)
-	resstr, err := packet.DecodeString(&it)
+	res1, err := it.Decode1()
+	res2, err := it.Decode2()
+	res4, err := it.Decode4()
+	res8, err := it.Decode8()
+	resbuf, err := it.DecodeBuffer()
+	resstr, err := it.DecodeString()
 
 	if err != nil {
 		t.Errorf("multiple decodes: %v", err)
 	}
 
 	if res1 != out1 {
-		t.Errorf("packet.Decode1(&it) = %X, expected %X", res1, out1)
+		t.Errorf("it.Decode1() = %X, expected %X", res1, out1)
 	}
 
 	if res2 != out2 {
-		t.Errorf("packet.Decode2(&it) = %X, expected %X", res2, out2)
+		t.Errorf("it.Decode2() = %X, expected %X", res2, out2)
 	}
 
 	if res4 != out4 {
-		t.Errorf("packet.Decode4(&it) = %X, expected %X", res4, out4)
+		t.Errorf("it.Decode4() = %X, expected %X", res4, out4)
 	}
 
 	if res8 != out8 {
-		t.Errorf("packet.Decode8(&it) = %X, expected %X", res8, out8)
+		t.Errorf("it.Decode8() = %X, expected %X", res8, out8)
 	}
 
 	if !bytes.Equal(resbuf, outbuf) {
-		t.Errorf("packet.DecodeBuffer(&it) = % X, expected % X", resbuf, outbuf)
+		t.Errorf("it.DecodeBuffer() = % X, expected % X", resbuf, outbuf)
 	}
 
 	if resstr != outstr {
-		t.Errorf("packet.DecodeString(&it) = %s, expected %s", resstr, outstr)
+		t.Errorf("it.DecodeString() = %s, expected %s", resstr, outstr)
 	}
 
 	if len(it) != 0 {
@@ -317,12 +317,12 @@ func TestMultipleDecode(t *testing.T) {
 }
 
 func TestDecodeFail(t *testing.T) {
-	const fun = "packet.Decode8(&it)"
+	const fun = "it.Decode8()"
 	var packet, out = Packet{0xDD, 0xCC, 0xBB, 0xAA},
 		uint64(0xAABBCCDDEEFF0011)
 
 	it := packet.Begin()
-	res, err := packet.Decode8(&it)
+	res, err := it.Decode8()
 
 	if err == nil {
 		t.Errorf("%s was supposed to fail but it didn't", fun, err)

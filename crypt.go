@@ -44,7 +44,7 @@ const encryptedHeaderSize = 4
 const blocksize = 1460
 
 var aeskey = [32]byte{
-        0x13, 0x00, 0x00, 0x00,
+	0x13, 0x00, 0x00, 0x00,
 	0x08, 0x00, 0x00, 0x00,
 	0x06, 0x00, 0x00, 0x00,
 	0xB4, 0x00, 0x00, 0x00,
@@ -77,7 +77,7 @@ func (c *Crypt) MapleVersion() uint16 {
 
 // IV returns a slice of the current initialization vector of this key (16 bytes)
 func (c *Crypt) IV() []byte {
-        return c.key[:]
+	return c.key[:]
 }
 
 // Encrypt encrypts the given array of bytes.
