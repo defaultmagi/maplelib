@@ -169,7 +169,7 @@ func (c *Crypt) Shuffle() {
 		newiv[2] ^= im12andwhatisthis[newiv[3]] + input
 		newiv[3] -= newiv[0] - valueinput
 
-		fulliv = uint32(newiv[3]<<24) | uint32(newiv[2]<<16) | uint32(newiv[1]<<8) | uint32(newiv[0])
+		fulliv = uint32(newiv[3])<<24 | uint32(newiv[2])<<16 | uint32(newiv[1])<<8 | uint32(newiv[0])
 		shift = fulliv>>0x1D | fulliv<<0x03
 
 		newiv[0] = byte(shift & uint32(0xFF))

@@ -43,3 +43,14 @@ func TestEncryption(t *testing.T) {
 		t.Errorf("Encrypted and decrypted packet = %v, expected %v", Packet(pcopy), packet)
 	}
 }
+
+func TestShuffle(t *testing.T) {
+        iv := [4]byte{0xFE, 0xCA, 0xDD, 0xBA}
+        nextiv := [4]byte{0x81, 0xA5, 0x8F, 0x29}
+        crypt := NewCrypt(iv, 62)
+        crypt.Shuffle()
+        
+        if !bytes.Equal(crypt.IV()[:4], nextiv[:]) {
+                t.Errorf("nextiv = % X, expected % X", crypt.IV()[:4], nextiv[:])
+        }
+}
