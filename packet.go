@@ -96,6 +96,11 @@ func (p *Packet) Encode8(qw uint64) {
 		byte(qw>>56))
 }
 
+func (p *Packet) Encode1s(b int8)  { p.Encode1(byte(b)) }   // Encode1 with signed values
+func (p *Packet) Encode2s(b int16) { p.Encode2(uint16(b)) } // Encode2 with signed values
+func (p *Packet) Encode4s(b int32) { p.Encode4(uint32(b)) } // Encode4 with signed values
+func (p *Packet) Encode8s(b int64) { p.Encode8(uint64(b)) } // Encode8 with signed values
+
 // EncodeBuffer encodes and appends a buffer to the packet using 2 bytes for the length
 // followed by the data
 func (p *Packet) EncodeBuffer(b []byte) {
@@ -175,6 +180,34 @@ func (it *PacketIterator) Decode8() (res uint64, err error) {
 		uint64(slice[6])<<48 |
 		uint64(slice[7])<<56
 	*it = slice[8:]
+	return
+}
+
+// Decode1 with signed values
+func (it *PacketIterator) Decode1s() (res int8, err error) {
+	tmp, err := it.Decode1()
+	res = int8(tmp)
+	return
+}
+
+// Decode2 with signed values
+func (it *PacketIterator) Decode2s() (res int16, err error) {
+	tmp, err := it.Decode2()
+	res = int16(tmp)
+	return
+}
+
+// Decode4 with signed values
+func (it *PacketIterator) Decode4s() (res int32, err error) {
+	tmp, err := it.Decode4()
+	res = int32(tmp)
+	return
+}
+
+// Decode8 with signed values
+func (it *PacketIterator) Decode8s() (res int64, err error) {
+	tmp, err := it.Decode8()
+	res = int64(tmp)
 	return
 }
 
