@@ -16,8 +16,8 @@
 package wz
 
 import (
-	"strconv"
 	"image"
+	"strconv"
 )
 
 // 90% of this package is ported directly from OdinMS, so credits to them
@@ -34,7 +34,10 @@ type MapleData interface {
 
 // GetString returns a pointer to the data's value as a string.
 // returns nil if the value is not a valid string.
-func GetString(d MapleData) *string { 
+func GetString(d MapleData) *string {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(string)
 	if !ok {
 		return nil
@@ -49,13 +52,16 @@ func GetStringD(d MapleData, defval string) string {
 	if res == nil {
 		return defval
 	}
-	
+
 	return *res
 }
 
 // GetDouble returns a pointer to the data's value as a float64.
 // returns nil if the value is not a valid float64.
-func GetDouble(d MapleData) *float64 { 
+func GetDouble(d MapleData) *float64 {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(float64)
 	if !ok {
 		return nil
@@ -70,13 +76,16 @@ func GetDoubleD(d MapleData, defval float64) float64 {
 	if res == nil {
 		return defval
 	}
-	
+
 	return *res
 }
 
 // GetFloat returns a pointer to the data's value as a float32.
 // returns nil if the value is not a valid float32.
 func GetFloat(d MapleData) *float32 {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(float32)
 	if !ok {
 		return nil
@@ -94,10 +103,12 @@ func GetFloatD(d MapleData, defval float32) float32 {
 	return *res
 }
 
-
 // GetInt returns a pointer to the data's value as an int32.
 // returns nil if the value is not a valid int32.
 func GetInt(d MapleData) *int32 {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(int32)
 	if !ok {
 		return nil
@@ -124,16 +135,16 @@ func GetIntConvert(d MapleData) *int32 {
 		if pstr == nil {
 			return nil
 		}
-		
+
 		i, err := strconv.Atoi(*pstr)
 		if err != nil {
 			return nil
 		}
-		
+
 		res := int32(i)
 		return &res
 	}
-	
+
 	return GetInt(d)
 }
 
@@ -148,17 +159,18 @@ func GetIntConvertD(d MapleData, defval int32) int32 {
 	return *res
 }
 
-
 // GetImage returns a pointer to the data's value as a pointer to image.Image.
 // returns nil if the value is not a valid maple canvas.
 func GetImage(d MapleData) *image.Image {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(*FileStoredPngMapleCanvas)
 	if !ok {
 		return nil
 	}
 	return val.Image()
 }
-
 
 // GetImageD returns the data's value as a pointer to image.Image.
 // If the value can't be retrieved, defval will be returned.
@@ -173,6 +185,9 @@ func GetImageD(d MapleData, defval *image.Image) *image.Image {
 // GetPoint returns a pointer to the data's value as an image.Point.
 // returns nil if the value is not a valid image.Point.
 func GetPoint(d MapleData) *image.Point {
+	if d == nil {
+		return nil
+	}
 	val, ok := d.Get().(image.Point)
 	if !ok {
 		return nil
@@ -190,7 +205,7 @@ func GetPointD(d MapleData, defval image.Point) image.Point {
 	return *res
 }
 
-// GetFullDataPath returns the full, absolute path to the data 
+// GetFullDataPath returns the full, absolute path to the data
 // by walking the mapledata backwards to the root node.
 func GetFullDataPath(d MapleData) string {
 	path := ""
@@ -199,5 +214,5 @@ func GetFullDataPath(d MapleData) string {
 		path = data.Name() + "/" + path
 		data = data.Parent()
 	}
-	return path[0:len(path)-1]
+	return path[0 : len(path)-1]
 }

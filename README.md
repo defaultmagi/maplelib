@@ -111,7 +111,7 @@ Reading wz xml files:
 		checkError(err)
 
 		// retrieving the INT info/speed value inside 0003.img.xml
-		// NOTE: you should normally error check for nil on img.ChildByPath
+		// NOTE: you should normally error check for nil on the returned pointer (val)
 		val := wz.GetInt(img.ChildByPath("info/speed")) // returns a *int32
 		fmt.Println("TamingMob.wz/0003.img.xml -> info -> speed =", *val)
 
