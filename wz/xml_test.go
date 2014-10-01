@@ -52,6 +52,14 @@ func TestXml(t *testing.T) {
 		t.Errorf("TamingMob.wz/0003.img/info/speed = %v(%v), expected %v(%v)",
 			v.Type(), val, e.Type(), expected[0])
 	}
+	conval := GetInt(img.ChildByPath("info/speed"))
+	if conval == nil {
+		t.Errorf("Failed to convert TamingMob.wz/0003.img/info/speed to int32")
+	}
+	if *conval != expected[0] {
+		t.Errorf("converted TamingMob.wz/0003.img/info/speed = %v, expected %v", 
+			*conval, expected[0])
+	}
 
 	// FLOAT
 	val = img.ChildByPath("info/swim").Get()
@@ -62,6 +70,14 @@ func TestXml(t *testing.T) {
 	if tmpstr != tmpexpectedstr {
 		t.Errorf("TamingMob.wz/0003.img/info/speed = %v(%v), expected %v(%v)",
 			v.Type(), val, e.Type(), expected[1])
+	}
+	conval1 := GetFloat(img.ChildByPath("info/swim"))
+	if conval1 == nil {
+		t.Errorf("Failed to convert TamingMob.wz/0003.img/info/swim to float32")
+	}
+	if *conval1 != expected[1] {
+		t.Errorf("converted TamingMob.wz/0003.img/info/swim = %v, expected %v", 
+			*conval1, expected[1])
 	}
 
 	// ----------------------------------------
@@ -79,6 +95,14 @@ func TestXml(t *testing.T) {
 		e := reflect.ValueOf(expected[2])
 		t.Errorf("Mob.wz/0210100.img/info/elemAttr = %v(%v), expected %v(%v)",
 			v.Type(), val, e.Type(), expected[2])
+	}
+	conval2 := GetString(img.ChildByPath("info/elemAttr"))
+	if conval2 == nil {
+		t.Errorf("Failed to convert TamingMob.wz/0003.img/info/elemAttr to string")
+	}
+	if *conval2 != expected[2] {
+		t.Errorf("converted TamingMob.wz/0003.img/info/elemAttr = %v, expected %v", 
+			*conval2, expected[2])
 	}
 
 	// CANVAS

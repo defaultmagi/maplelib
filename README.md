@@ -111,13 +111,13 @@ Reading wz xml files:
 		checkError(err)
 
 		// retrieving the INT info/speed value inside 0003.img.xml
-		// NOTE: the value is returned as an interface so you should type assert if you need to
-		val := img.ChildByPath("info/speed").Get()
-		fmt.Println("TamingMob.wz/0003.img.xml -> info -> speed =", val)
+		// NOTE: you should normally error check for nil on img.ChildByPath
+		val := wz.GetInt(img.ChildByPath("info/speed")) // returns a *int32
+		fmt.Println("TamingMob.wz/0003.img.xml -> info -> speed =", *val)
 
-		// retrievin the FLOAT info/swim value inside 0003.img.xml
-		val = img.ChildByPath("info/swim").Get()
-		fmt.Println("TamingMob.wz/0003.img.xml -> info -> swim =", val)
+		// retrieving the FLOAT info/swim value inside 0003.img.xml
+		val2 := wz.GetFloat(img.ChildByPath("info/swim")) // return a *float32
+		fmt.Println("TamingMob.wz/0003.img.xml -> info -> swim =", *val2)
 	}
 
 	func checkError(err error) {
