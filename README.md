@@ -129,10 +129,12 @@ Reading wz xml files:
     
 Documentation
 ============
-You can get the documentation with the built-in godoc 
+Documentation
+============
+You can view the documentation as HTML by simply running
 
-	godoc github.com/Francesco149/maplelib
-    
-If you're looking for a specific function or type just use
+	godoc -http=":6060"
 
-	godoc github.com/Francesco149/maplelib MyFunction
+and visiting
+
+	http://localhost:6060/pkg/github.com/Francesco149/maplelib/
