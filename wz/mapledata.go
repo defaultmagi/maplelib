@@ -130,6 +130,10 @@ func GetIntD(d MapleData, defval int32) int32 {
 // If the data's value is a string, it will convert the string to int32.
 // returns nil if the value is not a valid int32.
 func GetIntConvert(d MapleData) *int32 {
+	if d == nil {
+		return nil
+	}
+
 	if d.Type() == STRING {
 		pstr := GetString(d)
 		if pstr == nil {
