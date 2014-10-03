@@ -126,9 +126,6 @@ Reading wz xml files:
 		}
 	}
 	
-    
-Documentation
-============
 Documentation
 ============
 You can view the documentation as HTML by simply running
