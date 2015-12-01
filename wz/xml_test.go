@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ import (
 )
 
 func TestXml(t *testing.T) {
-	expected := []interface{}{int32(180), float32(100.0), "L3", image.Pt(29, 51)}
+	expected := []interface{}{
+		int32(180), float32(100.0), "L3", image.Pt(29, 51)}
 
 	path := filepath.Join(os.Getenv("GOPATH"), "src", "github.com",
 		"Francesco149", "maplelib", "wz", "testfiles")
@@ -98,10 +99,12 @@ func TestXml(t *testing.T) {
 	}
 	conval2 := GetString(img.ChildByPath("info/elemAttr"))
 	if conval2 == nil {
-		t.Errorf("Failed to convert TamingMob.wz/0003.img/info/elemAttr to string")
+		t.Errorf(
+			"Failed to convert TamingMob.wz/0003.img/info/elemAttr to string")
 	}
 	if *conval2 != expected[2] {
-		t.Errorf("converted TamingMob.wz/0003.img/info/elemAttr = %v, expected %v",
+		t.Errorf(
+			"converted TamingMob.wz/0003.img/info/elemAttr = %v, expected %v",
 			*conval2, expected[2])
 	}
 

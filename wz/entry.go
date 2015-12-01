@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,8 +16,10 @@
 package wz
 
 // 90% of this package is ported directly from OdinMS, so credits to them
+// TODO: reimplement this more efficiently
 
-// An Entry is a generic wz entry and holds data common to all types of wz entries
+// An Entry is a generic wz entry and holds data common to all
+// types of wz entries
 type Entry struct {
 	name     string
 	size     int // not used in wz xmls
@@ -27,8 +29,11 @@ type Entry struct {
 }
 
 // NewEntry initializes a generic wz entry object
-// NOTE: esize and echecksum are not used in wx xml reading and can be left zeroed
-func NewEntry(ename string, esize, echecksum int, eparent MapleDataEntity) *Entry {
+// NOTE: esize and echecksum are not used in wx xml reading and can be
+// left zeroed
+func NewEntry(ename string, esize, echecksum int, eparent MapleDataEntity,
+) *Entry {
+
 	return &Entry{
 		name:     ename,
 		size:     esize,

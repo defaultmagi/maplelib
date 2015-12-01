@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,7 +13,8 @@
    along with maplelib-go. If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Package maplelib contains various go utilities related to MapleStory (encryption, packets, and so on)
+// Package maplelib contains various go utilities related to MapleStory
+// (encryption, packets, and so on)
 package maplelib
 
 import "fmt"
@@ -22,7 +23,8 @@ import "fmt"
 // All of the numeric values are encoded in little endian.
 type Packet []byte
 
-// A PacketIterator is a slice of the packet array which is used as an iterator when reading values
+// A PacketIterator is a slice of the packet array which is used as an iterator
+// when reading values
 type PacketIterator []byte
 
 // A EndOfPacketError is returned when trying to read past the end of the packet
@@ -38,7 +40,8 @@ func (e EndOfPacketError) Error() string {
 }
 
 // NewPacket initializes an empty packet
-// NOTE: do not create packets with make or new, as that will cause unexpected behaviour
+// NOTE: do not create packets with make or new, as that will cause unexpected
+// behaviour
 func NewPacket() Packet {
 	return make(Packet, 0)
 }
@@ -96,20 +99,20 @@ func (p *Packet) Encode8(qw uint64) {
 		byte(qw>>56))
 }
 
-func (p *Packet) Encode1s(b int8)  { p.Encode1(byte(b)) }   // Encode1 with signed values
-func (p *Packet) Encode2s(b int16) { p.Encode2(uint16(b)) } // Encode2 with signed values
-func (p *Packet) Encode4s(b int32) { p.Encode4(uint32(b)) } // Encode4 with signed values
-func (p *Packet) Encode8s(b int64) { p.Encode8(uint64(b)) } // Encode8 with signed values
+func (p *Packet) Encode1s(b int8)  { p.Encode1(byte(b)) }   // signed Encode1
+func (p *Packet) Encode2s(b int16) { p.Encode2(uint16(b)) } // signed Encode2
+func (p *Packet) Encode4s(b int32) { p.Encode4(uint32(b)) } // signed Encode4
+func (p *Packet) Encode8s(b int64) { p.Encode8(uint64(b)) } // signed Encode8
 
-// EncodeBuffer encodes and appends a buffer to the packet using 2 bytes for the length
-// followed by the data
+// EncodeBuffer encodes and appends a buffer to the packet using 2 bytes for the
+// length followed by the data
 func (p *Packet) EncodeBuffer(b []byte) {
 	p.Encode2(uint16(len(b)))
 	p.Append(b)
 }
 
-// EncodeString encodes and appends a string to the packet using 2 bytes for the length
-// followed by the text bytes
+// EncodeString encodes and appends a string to the packet using 2 bytes for the
+// length followed by the text bytes
 func (p *Packet) EncodeString(str string) {
 	p.EncodeBuffer([]byte(str))
 }
@@ -120,7 +123,8 @@ func hasRoom(it PacketIterator, byteCount int) bool {
 	return len(it) >= byteCount
 }
 
-// Decode1 decodes a byte at the current position of the iterator which is then incremented
+// Decode1 decodes a byte at the current position of the iterator which is then
+// incremented
 func (it *PacketIterator) Decode1() (res byte, err error) {
 	slice := *it
 	if !hasRoom(slice, 1) {
@@ -133,7 +137,8 @@ func (it *PacketIterator) Decode1() (res byte, err error) {
 	return
 }
 
-// Decode2 decodes a word (2 bytes) at the current position of the iterator which is then incremented
+// Decode2 decodes a word (2 bytes) at the current position of the iterator
+// which is then incremented
 func (it *PacketIterator) Decode2() (res uint16, err error) {
 	slice := *it
 	if !hasRoom(slice, 2) {
@@ -147,7 +152,8 @@ func (it *PacketIterator) Decode2() (res uint16, err error) {
 	return
 }
 
-// Decode4 decodes a dword (4 bytes) at the current position of the iterator which is then incremented
+// Decode4 decodes a dword (4 bytes) at the current position of the iterator
+// which is then incremented
 func (it *PacketIterator) Decode4() (res uint32, err error) {
 	slice := *it
 	if !hasRoom(slice, 4) {
@@ -163,7 +169,8 @@ func (it *PacketIterator) Decode4() (res uint32, err error) {
 	return
 }
 
-// Decode8 decodes a qword (8 bytes) at the current position of the iterator which is then incremented
+// Decode8 decodes a qword (8 bytes) at the current position of the iterator
+// which is then incremented
 func (it *PacketIterator) Decode8() (res uint64, err error) {
 	slice := *it
 	if !hasRoom(slice, 8) {
@@ -211,8 +218,10 @@ func (it *PacketIterator) Decode8s() (res int64, err error) {
 	return
 }
 
-// DecodeBuffer decodes a buffer and returns a slice of the packet that points to the buffer
-// NOTE: the returned slice is NOT a copy and any operation on it will affect the packet
+// DecodeBuffer decodes a buffer and returns a slice of the packet that points
+// to the buffer
+// NOTE: the returned slice is NOT a copy and any operation on it will affect
+// the packet
 func (it *PacketIterator) DecodeBuffer() (res []byte, err error) {
 	buflen, err := it.Decode2()
 	if err != nil {

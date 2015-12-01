@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -35,8 +35,11 @@ type XMLDomMapleData struct {
 	imageDataDir string
 }
 
-// NewXMLDomMapleData parses the given xml file into a tree and returns the first node
-func NewXMLDomMapleData(file *os.File, path string) (res *XMLDomMapleData, err error) {
+// NewXMLDomMapleData parses the given xml file into a tree and returns the
+// first node
+func NewXMLDomMapleData(file *os.File, path string) (
+	res *XMLDomMapleData, err error) {
+
 	doc := xmlx.New()
 	err = doc.LoadStream(file, nil)
 
@@ -61,14 +64,16 @@ func (x *XMLDomMapleData) ChildByPath(path string) MapleData {
 		par := x.Parent()
 		res, ok := par.(MapleData)
 		if !ok {
-			panic(errors.New("XMLDomMapleData.ChildByPath: par failed type assertion"))
+			panic(errors.New(
+				"XMLDomMapleData.ChildByPath: par failed type assertion"))
 			return nil
 		}
 		return res.ChildByPath(path[strings.Index(path, "/")+1:])
 	}
 
 	mynode := x.node
-	newdatadir := x.imageDataDir // we will append the full node xmlpath to newdatadir
+	newdatadir := x.imageDataDir
+	// we will append the full node xmlpath to newdatadir
 
 	// iterate the path subfolder by subfolder
 	for i := 0; i < len(segments); i++ {
@@ -97,7 +102,9 @@ func (x *XMLDomMapleData) ChildByPath(path string) MapleData {
 
 	// return the desired node
 	res := fromNode(mynode)
-	res.imageDataDir = newdatadir // imageDataDir now holds the correct path for the png file
+	res.imageDataDir = newdatadir
+	// imageDataDir now holds the correct path for the png file
+
 	return res
 }
 

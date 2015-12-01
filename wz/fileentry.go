@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,9 @@ type FileEntry struct {
 
 // NewFileEntry initializes a new wz file entry object
 // NOTE: size and checksum are not used in wz xml parsing and can be left zeroed
-func NewFileEntry(name string, size, checksum int, parent MapleDataEntity) *FileEntry {
+func NewFileEntry(name string, size, checksum int, parent MapleDataEntity,
+) *FileEntry {
+
 	return &FileEntry{
 		Entry: NewEntry(name, size, checksum, parent),
 	}

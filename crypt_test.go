@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,13 +34,15 @@ func TestEncryption(t *testing.T) {
 	packetlen := GetPacketLength(pcopy)
 
 	if packetlen != len(packet[4:]) {
-		t.Errorf("Encrypted packet length = %d, expected %d", packetlen, len(packet[4:]))
+		t.Errorf("Encrypted packet length = %d, expected %d",
+			packetlen, len(packet[4:]))
 	}
 
 	crypt.Decrypt(pcopy[4:])
 
 	if !bytes.Equal(pcopy[4:], packet[4:]) {
-		t.Errorf("Encrypted and decrypted packet = %v, expected %v", Packet(pcopy), packet)
+		t.Errorf("Encrypted and decrypted packet = %v, expected %v",
+			Packet(pcopy), packet)
 	}
 }
 

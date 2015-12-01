@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import (
 
 // 90% of this package is ported directly from OdinMS, so credits to them
 
-// A FileStoredPngMapleCanvas is a wrapper around image.Image that holds information
+// A FileStoredPngMapleCanvas is a wrapper around image.Image that holds info
 // about a png image extracted from a wz file
 type FileStoredPngMapleCanvas struct {
 	filepath string
@@ -35,7 +35,9 @@ type FileStoredPngMapleCanvas struct {
 
 // NewFileStoredPngMapleCanvas initializes a new FileStoredPngMapleCanvas object
 // with the given file path and size
-func NewFileStoredPngMapleCanvas(w, h int, path string) *FileStoredPngMapleCanvas {
+func NewFileStoredPngMapleCanvas(w, h int, path string,
+) *FileStoredPngMapleCanvas {
+
 	return &FileStoredPngMapleCanvas{
 		filepath: path,
 		width:    w,

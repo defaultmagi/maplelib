@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,8 @@ import (
 
 // 90% of this package is ported directly from OdinMS, so credits to them
 
-// A MapleData is a generic interface for a wz file entry with a retrievable value
+// A MapleData is a generic interface for a wz file entry
+// with a retrievable value
 type MapleData interface {
 	Name() string
 	Parent() MapleDataEntity

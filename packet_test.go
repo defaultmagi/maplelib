@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ func TestEncode1(t *testing.T) {
 	p.Encode1(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.Encode1(0x%X) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.Encode1(0x%X) = %d, expected %d",
+			val, len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -40,7 +41,8 @@ func TestEncode2(t *testing.T) {
 	p.Encode2(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.Encode2(0x%X) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.Encode2(0x%X) = %d, expected %d",
+			val, len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -49,12 +51,14 @@ func TestEncode2(t *testing.T) {
 }
 
 func TestEncode4(t *testing.T) {
-	var val, out, bytecount = uint32(0xBAADF00D), []byte{0x0D, 0xF0, 0xAD, 0xBA}, 4
+	var val, out, bytecount = uint32(0xBAADF00D),
+		[]byte{0x0D, 0xF0, 0xAD, 0xBA}, 4
 	p := NewPacket()
 	p.Encode4(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.Encode4(0x%X) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.Encode4(0x%X) = %d, expected %d", val, len(p),
+			bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -63,12 +67,14 @@ func TestEncode4(t *testing.T) {
 }
 
 func TestEncode8(t *testing.T) {
-	var val, out, bytecount = uint64(0xBAADF00DBADDCAFE), []byte{0xFE, 0xCA, 0xDD, 0xBA, 0x0D, 0xF0, 0xAD, 0xBA}, 8
+	var val, out, bytecount = uint64(0xBAADF00DBADDCAFE),
+		[]byte{0xFE, 0xCA, 0xDD, 0xBA, 0x0D, 0xF0, 0xAD, 0xBA}, 8
 	p := NewPacket()
 	p.Encode8(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.Encode8(0x%X) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.Encode8(0x%X) = %d, expected %d",
+			val, len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -85,7 +91,8 @@ func TestEncodeBuffer(t *testing.T) {
 	p.EncodeBuffer(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.EncodeBuffer(% X) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.EncodeBuffer(% X) = %d, expected %d",
+			val, len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -102,7 +109,8 @@ func TestEncodeString(t *testing.T) {
 	p.EncodeString(val)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after p.EncodeString(%s) = %d, expected %d", val, len(p), bytecount)
+		t.Errorf("len(p) after p.EncodeString(%s) = %d, expected %d",
+			val, len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
@@ -131,13 +139,14 @@ func TestMultipleEncode(t *testing.T) {
 	p.EncodeString(valstr)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %d, expected %d",
-			val1, val2, val4, val8, valbuf, valstr, len(p), bytecount)
+		t.Errorf("len(p) after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %d, "+
+			"expected %d", val1, val2, val4, val8, valbuf, valstr,
+			len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
-		t.Errorf("p after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %v, expected % X",
-			val1, val2, val4, val8, valbuf, valstr, p, out)
+		t.Errorf("p after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %v, "+
+			"expected % X", val1, val2, val4, val8, valbuf, valstr, p, out)
 	}
 }
 
@@ -162,13 +171,14 @@ func TestMultipleEncodeS(t *testing.T) {
 	p.EncodeString(valstr)
 
 	if len(p) < bytecount {
-		t.Errorf("len(p) after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %d, expected %d",
-			val1, val2, val4, val8, valbuf, valstr, len(p), bytecount)
+		t.Errorf("len(p) after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, "+
+			"%s = %d, expected %d", val1, val2, val4, val8, valbuf, valstr,
+			len(p), bytecount)
 	}
 
 	if !bytes.Equal(p, out) {
-		t.Errorf("p after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %v, expected % X",
-			val1, val2, val4, val8, valbuf, valstr, p, out)
+		t.Errorf("p after encoding 0x%X, 0x%X, 0x%X, 0x%X, % X, %s = %v, "+
+			"expected % X", val1, val2, val4, val8, valbuf, valstr, p, out)
 	}
 }
 

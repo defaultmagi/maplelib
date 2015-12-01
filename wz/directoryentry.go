@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -59,7 +59,8 @@ func (e *DirectoryEntry) AddFile(file MapleDataFileEntry) {
 	e.entries[file.Name()] = file
 }
 
-// Subdirectories returns a slice of the wz subdirectories inside the wz directory
+// Subdirectories returns a slice of the wz subdirectories inside
+// the wz directory
 func (e *DirectoryEntry) Subdirectories() []MapleDataDirectoryEntry {
 	return e.subdirs
 }

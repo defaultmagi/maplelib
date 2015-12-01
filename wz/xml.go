@@ -1,5 +1,5 @@
 /*
-   Copyright 2014 Franc[e]sco (lolisamurai@tfwno.gf)
+   Copyright 2014-2015 Franc[e]sco (lolisamurai@tfwno.gf)
    This file is part of maplelib-go.
    maplelib-go is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,8 +37,9 @@ type Xml struct {
 // that will provide access to the wz xml data
 func NewXml(sourcedirpath string) (*Xml, error) {
 	x := &Xml{
-		root:              sourcedirpath,
-		rootForNavigation: NewDirectoryEntry(filepath.Base(sourcedirpath), 0, 0, nil),
+		root: sourcedirpath,
+		rootForNavigation: NewDirectoryEntry(
+			filepath.Base(sourcedirpath), 0, 0, nil),
 	}
 
 	// walk sourcedir and fill all data entities
@@ -48,7 +49,9 @@ func NewXml(sourcedirpath string) (*Xml, error) {
 
 // fillMapleDataEntities is a recursive function that walks the root directory
 // of the xml wz files and caches everything into the wzdir object
-func fillMapleDataEntities(lrootpath string, wzdir *DirectoryEntry) (err error) {
+func fillMapleDataEntities(lrootpath string, wzdir *DirectoryEntry) (
+	err error) {
+
 	lroot, err := os.Open(lrootpath)
 	if err != nil {
 		return
@@ -84,14 +87,16 @@ func fillMapleDataEntities(lrootpath string, wzdir *DirectoryEntry) (err error) 
 			wzdir.AddDirectory(newdir)
 
 			// recursively walk it
-			err = fillMapleDataEntities(filepath.Join(lrootpath, fileName), newdir)
+			err = fillMapleDataEntities(
+				filepath.Join(lrootpath, fileName), newdir)
 			if err != nil {
 				return
 			}
 
 		// found a file, add it
 		case strings.HasSuffix(fileName, ".xml"):
-			wzdir.AddFile(NewFileEntry(fileName[0:len(fileName)-4], 0, 0, wzdir))
+			wzdir.AddFile(
+				NewFileEntry(fileName[0:len(fileName)-4], 0, 0, wzdir))
 		}
 	}
 
