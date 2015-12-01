@@ -1,5 +1,17 @@
 Various Go utilities related to MapleStory (encryption, packets, and so on).
 
+Support me!
+============
+Like my releases? Donate me a coffe!
+
+Paypal: [click](http://hnng.moe/6M)
+
+Litecoin: LUZm98D1nPhNQBw9QjkSS9XJee9X5hPjw3
+
+Bitcoin: [15Jz8stcnkorzwCbUNk3qQbg2H9eySKXtb](bitcoin:15Jz8stcnkorzwCbUNk3qQbg2H9eySKXtb?label=donations) or [Bitcoin QR Code](http://hnng.moe/f/CM)
+
+Dogecoin: [DDaYKDUxib2SnVEk9trG98ajCyu1Hw9zgQ](dogecoin:DDaYKDUxib2SnVEk9trG98ajCyu1Hw9zgQ?label=donations&message=wow%20much%20donate%20very%20thanks) or [Dogecoin QR Code](http://hnng.moe/f/CL)
+
 Getting started
 ============
 Make sure that you have git and go installed and run

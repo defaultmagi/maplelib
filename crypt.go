@@ -88,11 +88,25 @@ func (c *Crypt) Encrypt(buffer []byte) {
 	c.aesCrypt(buffer[encryptedHeaderSize:])
 }
 
+// EncryptNoShanda encrypts the given array of bytes only using maple's AES.
+// NOTE: the array must have 4 bytes of space at the beginning for the encrypted
+// header
+func (c *Crypt) EncryptNoShanda(buffer []byte) {
+	c.makeHeader(buffer)
+	c.aesCrypt(buffer[encryptedHeaderSize:])
+}
+
 // Decrypt decrypts the given array of bytes.
 // NOTE: you must omit the first 4 bytes (encrypted header)
 func (c *Crypt) Decrypt(buffer []byte) {
 	c.aesCrypt(buffer[:])
 	mapleDecrypt(buffer[:])
+}
+
+// DecryptNoShanda decrypts the given array of bytes only using maple's AES.
+// NOTE: you must omit the first 4 bytes (encrypted header)
+func (c *Crypt) DecryptNoShanda(buffer []byte) {
+	c.aesCrypt(buffer[:])
 }
 
 func (c *Crypt) makeHeader(buffer []byte) {
