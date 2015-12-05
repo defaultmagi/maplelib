@@ -245,3 +245,29 @@ func (it *PacketIterator) DecodeString() (res string, err error) {
 	res = string(bytes[:])
 	return
 }
+
+// PopBytes returns a slice of the packet of count length starting from the
+// iterator.
+// NOTE: the returned slice is NOT a copy and any operation on it will affect
+// the packet.
+func (it *PacketIterator) PopBytes(count int) (res []byte, err error) {
+	slice := *it
+	if !hasRoom(slice, count) {
+		err = EndOfPacketError{count, len(slice)}
+		return
+	}
+
+	res = slice[:count]
+	*it = slice[count:]
+	return
+}
+
+// Skip moves the iterator forward by count bytes.
+func (it *PacketIterator) Skip(count int) error {
+	slice := *it
+	if !hasRoom(slice, count) {
+		return EndOfPacketError{count, len(slice)}
+	}
+	*it = slice[count:]
+	return nil
+}
